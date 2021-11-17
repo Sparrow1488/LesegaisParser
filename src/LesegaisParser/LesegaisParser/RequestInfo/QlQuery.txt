@@ -1,0 +1,22 @@
+query SearchReportWoodDeal($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!]) 
+{  searchReportWoodDeal(filter: $filter, pageable: 
+    { 
+        number: $number, 
+        size: $size}, 
+        orders: $orders) 
+        {
+            content 
+            {
+                sellerName
+                sellerInn
+                buyerName
+                buyerInn
+                woodVolumeBuyer
+                woodVolumeSeller
+                dealDate
+                dealNumber
+                __typename
+             }
+          __typename
+        }
+    }
