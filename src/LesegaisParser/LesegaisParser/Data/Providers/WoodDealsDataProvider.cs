@@ -25,8 +25,7 @@ namespace LesegaisParser.Data.Providers
 
             if(entity.TryGetData(out var woodDeals))
             {
-                foreach (var deal in woodDeals)
-                    deal.JsonView = JsonConvert.SerializeObject(deal);
+                woodDeals = Serialize(woodDeals);
 
                 db.WoodDeals.AddRange(woodDeals);
                 await db.SaveChangesAsync();
@@ -43,7 +42,10 @@ namespace LesegaisParser.Data.Providers
             foreach (var data in entities)
             {
                 if (data.TryGetData(out var woodDeals))
+                {
+                    woodDeals = Serialize(woodDeals);
                     db.WoodDeals.AddRange(woodDeals);
+                }
             }
             return await db.SaveChangesAsync();
         }
@@ -51,6 +53,13 @@ namespace LesegaisParser.Data.Providers
         public ReportWoodDeal Get(int id)
         {
             throw new NotImplementedException();
+        }
+
+        private IEnumerable<ReportWoodDeal> Serialize(IEnumerable<ReportWoodDeal> deals)
+        {
+            foreach (var deal in deals)
+                deal.JsonView = JsonConvert.SerializeObject(deal);
+            return deals;
         }
     }
 }
