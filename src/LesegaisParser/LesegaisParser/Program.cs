@@ -1,10 +1,12 @@
-﻿using LesegaisParser.Data;
-using LesegaisParser.Data.Providers;
+﻿using LesegaisParser.Data.Providers;
 using LesegaisParser.Data.Providers.Interfaces;
 using LesegaisParser.Entities;
 using LesegaisParser.Intefraces;
+using LesegaisParser.Timer;
+using LesegaisParser.Timer.Intefaces;
 using System;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace LesegaisParser
 {
@@ -13,7 +15,7 @@ namespace LesegaisParser
         public static string Query { get; set; }
         public static void Main()
         {
-            Database.Delete("Default");
+            StartInitAsync().Wait();
 
             ILesegaisParser<ReportWoodDeal> parser = new RentForestAreaParser();
             var data = parser.ParseAsync(5, 1).Result;
@@ -27,6 +29,16 @@ namespace LesegaisParser
                 provider.AddAsync(data).Wait();
             }
             else Console.WriteLine("Failed to get data");
+
+            Console.ReadKey();
+        }
+
+        private static async Task StartInitAsync()
+        {
+            //Database.Delete("Default");
+
+            var parser = new RentForestDealsScheduledParser();
+            await parser.StartAsync(1);
         }
     }
 }
