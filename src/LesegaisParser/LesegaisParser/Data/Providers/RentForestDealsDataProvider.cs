@@ -16,9 +16,16 @@ namespace LesegaisParser.Data.Providers
             _db = new WoodDealsDbContext(connectionStringName);
         }
 
-        public Task AddAsync(Data<ReportWoodDeal> entity)
+        public async Task AddAsync(Data<ReportWoodDeal> entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+                throw new NullReferenceException($"{nameof(entity)} was null!");
+
+            if(entity.TryGetData(out var woodDeals))
+            {
+                _db.WoodDeals.AddRange(woodDeals);
+                await _db.SaveChangesAsync();
+            }
         }
 
         public Task AddRangeAsync(IEnumerable<Data<ReportWoodDeal>> entities)
