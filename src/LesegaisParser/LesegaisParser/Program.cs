@@ -4,39 +4,83 @@ using LesegaisParser.Entities;
 using LesegaisParser.Intefraces;
 using LesegaisParser.Timer;
 using System;
-using System.Data.Entity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LesegaisParser
 {
     public class Program
     {
+        public static ILesegaisParser<ReportWoodDeal> WoodDealParser { get; set; }
+        public static IDataProvider<ReportWoodDeal> Database { get; set; }
+        private static IList<Data<ReportWoodDeal>> BufferedData { get; set; }
         public static void Main()
         {
-            StartInitAsync().Wait();
+            StartInit();
 
-            var parser = new RentForestAreaParser();
-            var data = parser.ParseAsync(5, 1).Result;
-            if(data.TryGetData(out var receivedData))
-            {
-                Console.WriteLine("Data received success!");
-                foreach (var dataItem in receivedData)
-                    Console.WriteLine("BuyerName is " + dataItem.BuyerName);
+            var totalSize = WoodDealParser.GetTotalCountAsync().Result;
+            SimpleLogger.LogInfo("Total count of values found : " + totalSize);
+            SaveAbsolutelyAllValues(totalSize).Wait();              // PARSE ALL DATA FROM SITE
+            SimpleLogger.LogSucc("All values parsed");
 
-                var provider = new RentForestDealsDataProvider("Default");
-                provider.AddAsync(data).Wait();
-            }
-            else Console.WriteLine("Failed to get data");
+            var parser = new RentForestDealsScheduledParser();  // PARSE VALUES FROM SITE EVERY 10 MINUTES AND UPDATE DB
+            parser.StartAsync(10).Wait();
 
             Console.ReadKey();
         }
 
-        private static async Task StartInitAsync()
+        private static void StartInit()
         {
-            Database.Delete("Default");
+            System.Data.Entity.Database.Delete("Default");
+            
+            Database = new WoodDealsDataProvider("Default");
+            WoodDealParser = new RentForestAreaParser();
+            BufferedData = new List<Data<ReportWoodDeal>>();
+        }
 
-            var parser = new RentForestDealsScheduledParser();
-            await parser.StartAsync(1);
+        private static async Task SaveAbsolutelyAllValues(int totalCount)
+        {
+            int valuesInRequest = 2; // gets this count of values in one response
+            int requests = totalCount / valuesInRequest;
+            int remainder = totalCount % valuesInRequest;
+            SimpleLogger.LogInfo($"Total requests {requests} requests");
+            SimpleLogger.LogInfo($"Last request gets {remainder} values");
+            SimpleLogger.LogInfo("Started to parse all values...");
+
+            for (int i = 0; i < requests; i++)
+            {
+                Data<ReportWoodDeal> data;
+
+                if (i == requests - 1)
+                    data = await WoodDealParser.ParseAsync(remainder, i);
+                else data = await WoodDealParser.ParseAsync(valuesInRequest, i);
+
+                if (data.ContentIsValid())
+                {
+                    SimpleLogger.LogSucc($"Data gets success ({i + 1}/{requests + 1})");
+
+                    BufferedData.Add(data);
+
+                    if (i % 2 == 0 || i == requests - 2)
+                    {
+                        AddRangeInDb(BufferedData).Wait();
+                        BufferedData = new List<Data<ReportWoodDeal>>();
+                    }
+                }
+                else SimpleLogger.LogError($"Failed to get data. ({i + 1}/{requests + 1})");
+
+                if (i == 2)
+                    return;
+            }
+        }
+
+        private static async Task AddRangeInDb(IList<Data<ReportWoodDeal>> dataRange)
+        {
+            SimpleLogger.LogInfo("Buffered data uploading in Database...");
+            var successCount = await Database.AddRangeAsync(dataRange);
+            if (successCount != dataRange.Count * dataRange[0].SearchReportWoodDeal.Content.Length)
+                SimpleLogger.LogError("Not all data uploaded success!");
+            SimpleLogger.LogSucc("Buffered data was upload in Db");
         }
     }
 }

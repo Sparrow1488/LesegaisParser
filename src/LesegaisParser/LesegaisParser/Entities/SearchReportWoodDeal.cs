@@ -1,7 +1,7 @@
 ﻿namespace LesegaisParser.Entities
 {
-    public class SearchReportWoodDeal<T>
+    public class SearchReportWoodDeal
     {
-        public T[] Content { get; set; }
+        public int Total { get; set; }
     }
 }

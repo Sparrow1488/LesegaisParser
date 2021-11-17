@@ -1,9 +1,13 @@
-﻿using LesegaisParser.Entities;
+﻿using LesegaisParser.Data;
+using LesegaisParser.Data.Providers;
+using LesegaisParser.Data.Providers.Interfaces;
+using LesegaisParser.Entities;
 using LesegaisParser.Intefraces;
 using LesegaisParser.Timer.Intefaces;
 using Quartz;
 using Quartz.Impl;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LesegaisParser.Timer
@@ -11,16 +15,33 @@ namespace LesegaisParser.Timer
     public class RentForestDealsScheduledParser : 
         IScheduledParser<RentForestAreaParser, ReportWoodDeal>
     {
-        public ILesegaisParser<ReportWoodDeal> Parser { get; set; }
+        private ILesegaisParser<ReportWoodDeal> _parser { get; set; }
+        private IDataProvider<ReportWoodDeal> _db { get; set; }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            if(Parser == null)
-                Parser = new RentForestAreaParser();
+            if(_parser == null)
+                _parser = new RentForestAreaParser();
+            if (_db == null)
+                _db = new WoodDealsDataProvider("Default");
 
-            Console.WriteLine("[ScheduledParser] Started parse data...");
-            var data = await Parser.ParseAsync(20, 1);
-            Console.WriteLine("[ScheduledParser] Parsed data");
+            SimpleLogger.LogInfo("[ScheduledParser] Started parse data...");
+            bool dataAvailable = true;
+            int currentPage = 0;
+            while (dataAvailable)
+            {
+                var data = await _parser.ParseAsync(50, currentPage);
+                using WoodDealsDbContext c = new WoodDealsDbContext("Default");
+                data.TryGetData(out var items);
+                int all = 0;
+                foreach (var item in items)
+                {
+                    var a = c.WoodDeals.Count((deal) => deal.DealNumber == item.DealNumber);
+                    if (a > 0)
+                        all++;
+                }
+            }
+            SimpleLogger.LogSucc("[ScheduledParser] Parsed data success");
         }
 
         public async Task StartAsync(int minutes)
@@ -30,15 +51,15 @@ namespace LesegaisParser.Timer
 
             IJobDetail job = JobBuilder.Create(typeof(RentForestDealsScheduledParser)).Build();
 
-            ITrigger trigger = TriggerBuilder.Create()  // создаем триггер
-                .WithIdentity("ForestDealsScheduledParser", "Group1")     // идентифицируем триггер с именем и группой
-                .StartNow()                            // запуск сразу после начала выполнения
-                .WithSimpleSchedule(x => x            // настраиваем выполнение действия
-                    .WithIntervalInMinutes(minutes)          // через 1 минуту
-                    .RepeatForever())                   // бесконечное повторение
-                .Build();                               // создаем триггер
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity("ForestDealsScheduledParser", "Group1") 
+                .StartNow() 
+                .WithSimpleSchedule(x => x 
+                    .WithIntervalInMinutes(minutes) 
+                    .RepeatForever()) 
+                .Build();
 
-            await scheduler.ScheduleJob(job, trigger);        // начинаем выполнение работы
+            await scheduler.ScheduleJob(job, trigger); 
         }
     }
 }

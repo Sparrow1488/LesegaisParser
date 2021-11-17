@@ -1,0 +1,15 @@
+﻿query SearchReportWoodDealCount($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!]) 
+{
+    searchReportWoodDeal(filter: $filter, pageable: 
+    {
+        number: $number, size: $size
+    }, 
+    orders: $orders) 
+        {
+            total
+            number
+            size
+            overallSellerVolume
+            __typename
+        }
+    }

@@ -4,7 +4,8 @@ namespace LesegaisParser.Entities
 {
     public class Data<T>
     {
-        public SearchReportWoodDeal<T> SearchReportWoodDeal { get; set; }
+        public SearchReport<T> SearchReportWoodDeal { get; set; }
+
         public bool TryGetData(out IEnumerable<T> outData)
         {
             bool dataExists = false;
@@ -16,5 +17,7 @@ namespace LesegaisParser.Entities
             }
             return dataExists;
         }
+
+        public bool ContentIsValid() => SearchReportWoodDeal.Content != null;
     }
 }
