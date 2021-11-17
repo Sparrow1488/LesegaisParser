@@ -1,5 +1,6 @@
 ﻿using LesegaisParser.Data.Providers.Interfaces;
 using LesegaisParser.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -23,6 +24,9 @@ namespace LesegaisParser.Data.Providers
 
             if(entity.TryGetData(out var woodDeals))
             {
+                foreach (var deal in woodDeals)
+                    deal.JsonView = JsonConvert.SerializeObject(deal);
+
                 _db.WoodDeals.AddRange(woodDeals);
                 await _db.SaveChangesAsync();
             }
