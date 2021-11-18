@@ -49,29 +49,36 @@ namespace LesegaisParser.Timer
             while (needUpdateData)
             {
                 var data = await _parser.ParseAsync(50, currentPage);
-                using WoodDealsDbContext c = new WoodDealsDbContext("Default");
+                using var dbContext = new WoodDealsDbContext("Default");
                 data.TryGetData(out var woodDeals);
-                int totalDealsCount = 0;
-                int existsDealsCount = 0;
-                var bufferedDeals = new List<ReportWoodDeal>();
-                foreach (var deal in woodDeals)
-                {
-                    var countInDb = c.WoodDeals.Count((dealDb) => dealDb.DealNumber == deal.DealNumber);
-                    if (countInDb < 1)
-                        bufferedDeals.Add(deal);
-                    else existsDealsCount++;
-                    totalDealsCount++;
-                }
 
-                if (bufferedDeals.Count > 0)
-                    await _db.AddAsync(data);
+                var checkFields = GetDealNumberFields(woodDeals);
+                var existsInDbDealNums = dbContext.WoodDeals
+                                                                     .Where(dbDeal => checkFields
+                                                                                                   .Contains(dbDeal.DealNumber))
+                                                                     .Select(dbDeal => dbDeal.DealNumber)
+                                                                     .Distinct()
+                                                                     .ToList();
+                
+                var uniqueDeals = woodDeals.Where(listDeal => !existsInDbDealNums.Contains(listDeal.DealNumber)).ToList();
 
-                if (existsDealsCount > 0)
+                if (uniqueDeals.Count > 0)
+                    await _db.AddRangeAsync(uniqueDeals);
+
+                if (uniqueDeals.Count == 0)
                     needUpdateData = false;
-                else currentPage++;
+
+                currentPage++;
             }
             SimpleLogger.LogSucc($"[ScheduledParser] Parsed data success");
         }
         
+        private List<string> GetDealNumberFields(IEnumerable<ReportWoodDeal> deals)
+        {
+            var fieldsList = new List<string>();
+            foreach (var deal in deals)
+                fieldsList.Add(deal.DealNumber);
+            return fieldsList;
+        }
     }
 }
