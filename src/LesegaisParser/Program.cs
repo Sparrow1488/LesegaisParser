@@ -24,7 +24,6 @@ namespace LesegaisParser
             var totalSize = WoodDealParser.GetTotalCountAsync().Result;
             SimpleLogger.LogInfo("Total count of values found : " + totalSize);
             SaveAbsolutelyAllValues(totalSize).Wait();              // PARSE ALL DATA FROM SITE
-            SimpleLogger.LogSucc("All values parsed");
 
             var parser = new RentForestDealsScheduledParser();  // PARSE VALUES FROM SITE EVERY 10 MINUTES AND UPDATE DB
             parser.StartAsync(10).Wait();
@@ -44,7 +43,7 @@ namespace LesegaisParser
 
         private static async Task SaveAbsolutelyAllValues(int totalCount)
         {
-            int valuesInRequest = 500; // gets this count of values in one response
+            int valuesInRequest = 500;
             int requests = totalCount / valuesInRequest;
             int remainder = totalCount % valuesInRequest;
             SimpleLogger.LogInfo($"Total requests {requests} requests");
@@ -72,10 +71,8 @@ namespace LesegaisParser
                     }
                 }
                 else SimpleLogger.LogError($"Failed to get data. ({i + 1}/{requests + 1})");
-
-                if (i == 2)
-                    i = requests - 2;
             }
+            SimpleLogger.LogSucc("All values parsed");
         }
 
         private static async Task AddRangeInDb(IList<Data<ReportWoodDeal>> dataRange)
