@@ -8,6 +8,7 @@ namespace LesegaisParser.Data.Providers.Interfaces
     {
         Task AddAsync(Data<T> entity);
         Task<int> AddRangeAsync(IEnumerable<Data<T>> entities);
+        Task<int> AddRangeAsync(IEnumerable<T> entities);
         T Get(int id);
     }
 }

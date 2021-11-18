@@ -16,6 +16,9 @@ namespace LesegaisParser
         private static IList<Data<ReportWoodDeal>> BufferedData { get; set; }
         public static void Main()
         {
+            // Before beginning work, please create DB local named "LesegaisDb" 
+            // and then paste on App.config your connection string
+
             StartInit();
 
             var totalSize = WoodDealParser.GetTotalCountAsync().Result;
@@ -26,12 +29,13 @@ namespace LesegaisParser
             var parser = new RentForestDealsScheduledParser();  // PARSE VALUES FROM SITE EVERY 10 MINUTES AND UPDATE DB
             parser.StartAsync(10).Wait();
 
+            SimpleLogger.LogInfo("Press any button to exit cmd...");
             Console.ReadKey();
         }
 
         private static void StartInit()
         {
-            System.Data.Entity.Database.Delete("Default");
+            //System.Data.Entity.Database.Delete("Default"); // To recreate db
             
             Database = new WoodDealsDataProvider("Default");
             WoodDealParser = new RentForestAreaParser();
@@ -40,7 +44,7 @@ namespace LesegaisParser
 
         private static async Task SaveAbsolutelyAllValues(int totalCount)
         {
-            int valuesInRequest = 2; // gets this count of values in one response
+            int valuesInRequest = 500; // gets this count of values in one response
             int requests = totalCount / valuesInRequest;
             int remainder = totalCount % valuesInRequest;
             SimpleLogger.LogInfo($"Total requests {requests} requests");
@@ -70,7 +74,7 @@ namespace LesegaisParser
                 else SimpleLogger.LogError($"Failed to get data. ({i + 1}/{requests + 1})");
 
                 if (i == 2)
-                    return;
+                    i = requests - 2;
             }
         }
 

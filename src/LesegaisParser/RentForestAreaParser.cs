@@ -12,7 +12,7 @@ namespace LesegaisParser
     {
         public RentForestAreaParser()
         {
-            Query = File.ReadAllText(@"C:\Users\Dom\Desktop\Репозитории\LesegaisParser\src\LesegaisParser\LesegaisParser\RequestInfo\QlQuery.txt");
+            Query = "query SearchReportWoodDeal($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!])\n {  searchReportWoodDeal(filter: $filter, pageable: \n    {         number: $number,\n         size: $size},\n         orders: $orders)\n         {\n            content\n             {\n                sellerName\n                sellerInn\n                buyerName\n                buyerInn\n                woodVolumeBuyer\n                woodVolumeSeller\n                dealDate\n                dealNumber\n                __typename\n             \n}\n          __typename\n        \n}\n    }";
         }
 
         public string Query { get; private set; }
@@ -23,7 +23,7 @@ namespace LesegaisParser
         public async Task<int> GetTotalCountAsync()
         {
             var client = new GraphQLHttpClient(EndPoint, new NewtonsoftJsonSerializer());
-            var request = CreateTotalSizeRequest(@"C:\Users\Dom\Desktop\Репозитории\LesegaisParser\src\LesegaisParser\LesegaisParser\RequestInfo\QlQueryTotal.txt");
+            var request = CreateTotalSizeRequest();
             var response = await client.SendQueryAsync<Data<SearchReportWoodDeal>>(request);
             var totalSize = response.Data.SearchReportWoodDeal.Total;
             return totalSize;
@@ -47,9 +47,9 @@ namespace LesegaisParser
             });
         }
 
-        private GraphQLRequest CreateTotalSizeRequest(string txtFileWithQueryPath)
+        private GraphQLRequest CreateTotalSizeRequest()
         {
-            var query = File.ReadAllText(txtFileWithQueryPath);
+            var query = "query SearchReportWoodDealCount($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!])\n {\n    searchReportWoodDeal(filter: $filter, pageable:\n     {\n        number: $number, size: $size    \n},\n     orders: $orders)\n         {\n            total\n           number\n            size\n            overallSellerVolume\n            __typename\n        \n}\n    }";
             return new GraphQLRequest(query: query, operationName: "SearchReportWoodDealCount", variables: new
             {
                 size = 500,

@@ -50,6 +50,21 @@ namespace LesegaisParser.Data.Providers
             return await db.SaveChangesAsync();
         }
 
+        public async Task<int> AddRangeAsync(IEnumerable<ReportWoodDeal> entities)
+        {
+            using var db = new WoodDealsDbContext(_connectionStringName);
+            if (entities == null)
+                throw new NullReferenceException($"{nameof(entities)} was null!");
+
+            entities = Serialize(entities);
+            foreach (var deal in entities)
+            {
+                entities = Serialize(entities);
+                db.WoodDeals.AddRange(entities);
+            }
+            return await db.SaveChangesAsync();
+        }
+
         public ReportWoodDeal Get(int id)
         {
             throw new NotImplementedException();
