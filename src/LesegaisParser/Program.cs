@@ -35,7 +35,7 @@ namespace LesegaisParser
         private static void StartInit()
         {
             //System.Data.Entity.Database.Delete("Default"); // To recreate db
-            
+
             Database = new WoodDealsDataProvider("Default");
             WoodDealParser = new RentForestAreaParser();
             BufferedData = new List<Data<ReportWoodDeal>>();
