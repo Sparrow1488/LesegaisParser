@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sparrow1488.LesegaisParser", "Sparrow1488.LesegaisParser.csproj", "{D54722C9-5BC0-4DE3-B00B-53EC5B577471}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LesegaisParser", "LesegaisParser\LesegaisParser.csproj", "{5FF32F30-892D-4D6D-9570-3E2681A3495C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D54722C9-5BC0-4DE3-B00B-53EC5B577471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D54722C9-5BC0-4DE3-B00B-53EC5B577471}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D54722C9-5BC0-4DE3-B00B-53EC5B577471}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D54722C9-5BC0-4DE3-B00B-53EC5B577471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FF32F30-892D-4D6D-9570-3E2681A3495C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF32F30-892D-4D6D-9570-3E2681A3495C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF32F30-892D-4D6D-9570-3E2681A3495C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF32F30-892D-4D6D-9570-3E2681A3495C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E0581AEE-D343-407F-9669-B2CF038D1491}
+		SolutionGuid = {B0A4194B-E394-4BFF-BB49-75BB40BCA829}
 	EndGlobalSection
 EndGlobal

@@ -49,26 +49,29 @@ namespace LesegaisParser.Timer
             while (needUpdateData)
             {
                 var data = await _parser.ParseAsync(50, currentPage);
-                using var dbContext = new WoodDealsDbContext("Default");
-                data.TryGetData(out var woodDeals);
+                using (var dbContext = new WoodDealsDbContext("Default"))
+                {
+                    data.TryGetData(out var woodDeals);
 
-                var checkFields = GetDealNumberFields(woodDeals);
-                var existsInDbDealNums = dbContext.WoodDeals
-                                                                     .Where(dbDeal => checkFields
-                                                                                                   .Contains(dbDeal.DealNumber))
-                                                                     .Select(dbDeal => dbDeal.DealNumber)
-                                                                     .Distinct()
-                                                                     .ToList();
+                    var checkFields = GetDealNumberFields(woodDeals);
+                    var existsInDbDealNums = dbContext.WoodDeals
+                                                                         .Where(dbDeal => checkFields
+                                                                                                       .Contains(dbDeal.DealNumber))
+                                                                         .Select(dbDeal => dbDeal.DealNumber)
+                                                                         .Distinct()
+                                                                         .ToList();
+
+                    var uniqueDeals = woodDeals.Where(listDeal => !existsInDbDealNums.Contains(listDeal.DealNumber)).ToList();
+
+                    if (uniqueDeals.Count > 0)
+                        await _db.AddRangeAsync(uniqueDeals);
+
+                    if (uniqueDeals.Count == 0)
+                        needUpdateData = false;
+
+                    currentPage++;
+                }
                 
-                var uniqueDeals = woodDeals.Where(listDeal => !existsInDbDealNums.Contains(listDeal.DealNumber)).ToList();
-
-                if (uniqueDeals.Count > 0)
-                    await _db.AddRangeAsync(uniqueDeals);
-
-                if (uniqueDeals.Count == 0)
-                    needUpdateData = false;
-
-                currentPage++;
             }
             SimpleLogger.LogSucc($"[ScheduledParser] Parsed data success");
         }
