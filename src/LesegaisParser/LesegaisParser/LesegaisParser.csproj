@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5FF32F30-892D-4D6D-9570-3E2681A3495C}</ProjectGuid>
+    <ProjectGuid>{4AA9C019-AC0A-4581-989D-358526BA5615}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>LesegaisParser</RootNamespace>
     <AssemblyName>LesegaisParser</AssemblyName>
@@ -13,8 +12,6 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,163 +33,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="GraphQL.Client, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GraphQL.Client.4.0.1\lib\net461\GraphQL.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="GraphQL.Client.Abstractions, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GraphQL.Client.Abstractions.4.0.1\lib\netstandard2.0\GraphQL.Client.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="GraphQL.Client.Abstractions.Websocket, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GraphQL.Client.Abstractions.Websocket.4.0.1\lib\netstandard2.0\GraphQL.Client.Abstractions.Websocket.dll</HintPath>
-    </Reference>
-    <Reference Include="GraphQL.Client.Serializer.Newtonsoft, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GraphQL.Client.Serializer.Newtonsoft.4.0.1\lib\netstandard2.0\GraphQL.Client.Serializer.Newtonsoft.dll</HintPath>
-    </Reference>
-    <Reference Include="GraphQL.Primitives, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GraphQL.Primitives.4.0.1\lib\netstandard2.0\GraphQL.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Quartz, Version=3.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Quartz.3.3.3\lib\net472\Quartz.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.WebSockets.Client.Managed, Version=1.0.22.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.WebSockets.Client.Managed.1.0.22\lib\net45\System.Net.WebSockets.Client.Managed.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive, Version=4.3.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.4.3.2\lib\net46\System.Reactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Providers\Intefaces\IDataProvider.cs" />
-    <Compile Include="Data\Providers\WoodDealsDataProvider.cs" />
-    <Compile Include="Data\WoodDealsDbContext.cs" />
-    <Compile Include="Entities\Data.cs" />
-    <Compile Include="Entities\ReportWoodDeal.cs" />
-    <Compile Include="Entities\SearchReport.cs" />
-    <Compile Include="Entities\SearchReportWoodDeal.cs" />
-    <Compile Include="Intefraces\ILesegaisParser.cs" />
-    <Compile Include="Migrations\202111171306275_WoodDealsMigration.cs" />
-    <Compile Include="Migrations\202111171306275_WoodDealsMigration.Designer.cs">
-      <DependentUpon>202111171306275_WoodDealsMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111171338256_JsonMigration.cs" />
-    <Compile Include="Migrations\202111171338256_JsonMigration.Designer.cs">
-      <DependentUpon>202111171338256_JsonMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111171343192_WoodDealsJsonView.cs" />
-    <Compile Include="Migrations\202111171343192_WoodDealsJsonView.Designer.cs">
-      <DependentUpon>202111171343192_WoodDealsJsonView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111171456399_WoodDealsChangeMaxValues.cs" />
-    <Compile Include="Migrations\202111171456399_WoodDealsChangeMaxValues.Designer.cs">
-      <DependentUpon>202111171456399_WoodDealsChangeMaxValues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111171830545_WoodDealsChangeMigration.cs" />
-    <Compile Include="Migrations\202111171830545_WoodDealsChangeMigration.Designer.cs">
-      <DependentUpon>202111171830545_WoodDealsChangeMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111171836160_WoodDealsChangePropMigration.cs" />
-    <Compile Include="Migrations\202111171836160_WoodDealsChangePropMigration.Designer.cs">
-      <DependentUpon>202111171836160_WoodDealsChangePropMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111171840471_WoodDealsChangeAllPropsMigration.cs" />
-    <Compile Include="Migrations\202111171840471_WoodDealsChangeAllPropsMigration.Designer.cs">
-      <DependentUpon>202111171840471_WoodDealsChangeAllPropsMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RentForestAreaParser.cs" />
-    <Compile Include="SimpleLogger.cs" />
-    <Compile Include="Timer\Intefaces\IScheduledParser.cs" />
-    <Compile Include="Timer\RentForestDealsScheduledParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202111171306275_WoodDealsMigration.resx">
-      <DependentUpon>202111171306275_WoodDealsMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111171338256_JsonMigration.resx">
-      <DependentUpon>202111171338256_JsonMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111171343192_WoodDealsJsonView.resx">
-      <DependentUpon>202111171343192_WoodDealsJsonView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111171456399_WoodDealsChangeMaxValues.resx">
-      <DependentUpon>202111171456399_WoodDealsChangeMaxValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111171830545_WoodDealsChangeMigration.resx">
-      <DependentUpon>202111171830545_WoodDealsChangeMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111171836160_WoodDealsChangePropMigration.resx">
-      <DependentUpon>202111171836160_WoodDealsChangePropMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111171840471_WoodDealsChangeAllPropsMigration.resx">
-      <DependentUpon>202111171840471_WoodDealsChangeAllPropsMigration.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="RequestInfo\QlQuery.txt" />
-    <Content Include="RequestInfo\QlQueryTotal.txt" />
-    <Content Include="RequestInfo\QlVariables.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-  </Target>
-  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>
