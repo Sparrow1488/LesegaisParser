@@ -1,5 +1,5 @@
-﻿using Kernel.Layer;
-using System.Collections;
+﻿using Kernel.Tools.Logging;
+using System;
 
 namespace LesegaisParser
 {
@@ -7,14 +7,16 @@ namespace LesegaisParser
     {
         public static void Main()
         {
-            var deal = new Woodreportdeals();
-            var manager = new WoodreportdealsManager();
-            var array = new ArrayList();
-            array.Add(deal);
+            var deals = new WoodDealsParser().ParseAsync().GetAwaiter().GetResult();
+            if (deals.Length > 0)
+            {
+                Logger.Success("Сделки успешно получены");
+                foreach (var deal in deals)
+                    Logger.Log("Покупатель: " + deal.Buyername + "; ИНН: " + deal.Buyerinn);
+            }
+            else Logger.Error("Возникла ошибка в ходе получения сделок, либо же в ответ ничего не пришло");
 
-            var key = "item-key";
-            manager.SaveObject(key, array);                       // сохранение в БД
-            var receivedObject = manager.GetObject(key);  // извлечение из БД
+            Console.ReadKey();
         }
     }
 }
