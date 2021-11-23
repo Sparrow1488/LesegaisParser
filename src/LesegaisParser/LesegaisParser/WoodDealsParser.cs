@@ -16,24 +16,34 @@ namespace LesegaisParser
     {
         public GraphQlRequest Request { get; private set; }
         public readonly string Query = "query SearchReportWoodDeal($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!])\n {  searchReportWoodDeal(filter: $filter, pageable: \n{ number: $number,\nsize: $size},\norders: $orders)\n{\ncontent\n{\nsellerName\nsellerInn\nbuyerName\nbuyerInn\nwoodVolumeBuyer\nwoodVolumeSeller\ndealDate\ndealNumber\n __typename\n\n}\n__typename\n \n}\n}";
-        public int ParseItemsCount { get; set; } = 2;
+        public readonly string TotalQuery = "query SearchReportWoodDealCount($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!]) {\n  searchReportWoodDeal(filter: $filter, pageable: {number: $number, size: $size}, orders: $orders) {\n    total\n    number\n    size\n    overallBuyerVolume\n    overallSellerVolume\n    __typename\n  }\n}\n";
+        public int ParseItemsCount { get; set; } = 50;
         public int ParseCurrentPage { get; set; } = 0;
         public readonly string EndPoint = @"https://www.lesegais.ru/open-area/graphql";
 
         public async Task<Woodreportdeals[]> ParseAsync()
         {
-            var jsonResponse = await SendGraphQlRequestAsync();
+            var variables = new { size = ParseItemsCount, number = ParseCurrentPage };
+            var jsonResponse = await SendGraphQlRequestAsync(Query, "SearchReportWoodDeal", variables);
             var container = JsonConvert.DeserializeObject<DataContainer>(jsonResponse);
             return container?.Data?.SearchReportWoodDeal?.Content ?? new Woodreportdeals[0];
         }
 
-        public async Task<string> SendGraphQlRequestAsync()
+        public async Task<int> GetTotalSizeAsync()
+        {
+            var variables = new { size = ParseItemsCount, number = ParseCurrentPage };
+            var jsonResponse = await SendGraphQlRequestAsync(TotalQuery, "SearchReportWoodDealCount", variables);
+            var container = JsonConvert.DeserializeObject<DataContainer>(jsonResponse);
+            return container.Data.SearchReportWoodDeal.Total;
+        }
+
+        private async Task<string> SendGraphQlRequestAsync(string query, string operationName, object variables)
         {
             var graphQlRequest = new GraphQlRequest
             {
-                query = Query,
-                operationName = "SearchReportWoodDeal",
-                variables = new { size = ParseItemsCount, number = ParseCurrentPage }
+                query =query ,
+                operationName = operationName,
+                variables = variables
             };
             var jsonBody = JsonConvert.SerializeObject(graphQlRequest);
 
